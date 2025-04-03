@@ -13,6 +13,7 @@ const corsOptions = {
 
 // import routes
 const menuRoutes = require('./Routes/menuRoutes');
+const orderRoutes = require('./Routes/orderRoutes');
 
 app.use(cors(corsOptions));
 app.use(express.json());    
@@ -20,6 +21,7 @@ app.use(express.json());
 // api endpoints
 app.use('/api/menu', menuRoutes);
 app.use('/images', express.static('uploads'));
+app.use('/api/order', orderRoutes);
 
 app.get('/', (req, res) => {
     res.send('API is running...');

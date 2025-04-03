@@ -50,6 +50,7 @@ const Addmenu = () => {
 
   return (
     <div className='add'>
+        <h3>Add Menu</h3><br/>
         <form className='flex-col' onSubmit={onSubmitHandler}>
             <div className='add-img-upload flex-col'>
                 <p>Upload Image</p>

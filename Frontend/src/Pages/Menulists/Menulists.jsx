@@ -35,7 +35,7 @@ const Menulists = () => {
 
   return (
     <div className='list add flex-col'>
-      <p>All Menu List</p>
+      <h3>All Menu List</h3>
       <div className='list-table'>
         <div className='list-table-format title'>
           <b>Image</b>

@@ -1,10 +1,90 @@
-import React from 'react'
-import './Orders.css'
+import React, { useState, useEffect } from 'react';
+import './Orders.css';
+import axios from 'axios';
+import { toast } from 'react-toastify';
+import { assets } from '../../assets/assets';
 
 const Orders = () => {
-  return (
-    <div>Orders</div>
-  )
-}
+  const url = "http://localhost:7001";
+  const [orders, setOrders] = useState([]);
 
-export default Orders
+  const fetchAllOrders = async () => {
+    try {
+      const response = await axios.get(`${url}/api/order/list`);
+      if (response.data.success) {
+        setOrders(response.data.data);
+        console.log(response.data.data);
+      } else {
+        toast.error("Failed to fetch orders");
+      }
+    } catch (error) {
+      toast.error("Error");
+    }
+  };
+
+  const statusHandler = async (event, orderId) => {
+    const newStatus = event.target.value;
+
+    try{
+      const response = await axios.put(`${url}/api/order/${orderId}/status`, {
+        orderStatus: newStatus
+      });
+
+      if(response.data.success){
+        await fetchAllOrders();
+      }
+    } catch (error) {
+      console.error("Error")
+    }
+  }
+
+  useEffect(() => {
+    fetchAllOrders();
+  }, []);
+
+  return (
+    <div className='order add'>
+      <h3>Order History</h3>
+      <div className='order-list'>
+        {orders.map((order, index) => (
+          <div key={index} className='order-item'>
+
+            <img src={assets.parcel_icon} className='parcel-icon' alt='Parcel Icon' />
+
+            <div>
+              <p className='order-item-id'><strong>Order ID:</strong> {order.orderId}</p>
+              <p className='order-customer-id'><strong>Customer ID:</strong> {order.customerId}</p>
+              <p className='order-restaurant-id'><strong>Restaurant ID:</strong> {order.restaurantId}</p>
+              <p className='order-item-address'><strong>Payment Status:</strong> {order.paymentStatus}</p>
+              <p className='order-item-address'><strong>Order Time:</strong> {new Date(order.orderTime).toLocaleString()}</p>
+              <p className='order-item-phone'><strong>Order Status:</strong> {order.orderStatus}</p>
+            </div>
+
+            <p className='order-item-food'>
+              <p>Menu Item x Quantity:</p>
+                {order.items.map((item, itemIndex) => (
+                  <span key={itemIndex}>
+                    {item.itemId} x {item.quantity}
+                    {itemIndex !== order.items.length - 1 ? ', ' : ''}
+                  </span>
+                ))}
+            </p>
+
+            <p><strong>Rs.{order.totalAmount}</strong></p>
+
+            <select onChange={(event)=>statusHandler(event, order.orderId)} value={order.orderStatus}>
+              <option value="Pending">Pending</option>
+              <option value="Confirmed">Confirmed</option>
+              <option value="Preparing">Preparing</option>
+              <option value="ReadyToDeliver">Ready To Deliver</option>
+              <option value="Cancelled">Cancelled</option>
+            </select>
+
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+};
+
+export default Orders;
