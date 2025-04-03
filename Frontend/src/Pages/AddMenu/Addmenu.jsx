@@ -79,7 +79,7 @@ const Addmenu = () => {
                     </select>
                 </div>
                 <div className='add-price flex-col'>
-                    <p>Price</p>
+                    <p>Price (Rs.)</p>
                     <input onChange={onChangeHandler} value={data.price} type='number' name='price' placeholder='Enter Price' required />
                 </div>
             </div>
