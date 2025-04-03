@@ -2,6 +2,8 @@ import React from 'react'
 import Navbar from './Components/Navbar/Navbar'
 import Sidebar from './Components/Sidebar/Sidebar'
 import { Routes, Route } from 'react-router-dom'
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 import Addmenu from './Pages/AddMenu/Addmenu'
 import Menulists from './Pages/Menulists/Menulists'
@@ -10,6 +12,7 @@ import Orders from './Pages/Orders/Orders'
 const App = () => {
   return (
     <div>
+      <ToastContainer />
       <Navbar /> 
       <hr />
       <div className="app-content">
