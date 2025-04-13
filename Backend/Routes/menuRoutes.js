@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { addFood, getAllFood, deleteFood } = require('../Controllers/menuController');
+const { addFood, getAllFood, updateFood, deleteFood } = require('../Controllers/menuController');
 const multer = require('multer');
 
 //Image storage configuration
@@ -15,6 +15,7 @@ const upload = multer ({ storage: storage });
 
 router.post('/add', upload.single("image"), addFood);
 router.get('/list', getAllFood);
+router.put('/update/:id', upload.single('image'), updateFood);
 router.delete('/delete/:id', deleteFood);
 
 
