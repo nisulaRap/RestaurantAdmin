@@ -5,49 +5,52 @@ const menuSchema = new mongoose.Schema({
         type: String,
         unique: true
     },
+    resturantId: {
+        type: mongoose.Schema.ObjectId,
+        ref: 'Resturant',
+        required: true
+    },
     name: {
         type: String,
-        required: true,
+        required: true
     },
     description: {
         type: String,
-        required: true,
+        required: true
     },
     price: {
         type: Number,
-        required: true,
+        required: true
     },
     image: {
         type: String,
-        required: true,
+        required: true
     },
     category: {
         type: String,
         enum: ['Sides', 'Pizza', 'Dessert', 'Beverage', 'Soup'],
-        required: true,
-    },
+        required: true
+    }
 });
 
 // Generate menuId before saving
 menuSchema.pre('save', async function (next) {
-    if (!this.isNew) {
-      return next();
-    }
-  
+    if (!this.isNew) return next();
+
     try {
-      const lastMenuItem = await this.constructor.findOne({}, {}, { sort: { 'menuId': -1 } });
-      let newMenuId = 'M-0001'; 
-  
-      if (lastMenuItem && lastMenuItem.menuId) {
-        const lastMenuIdNumber = parseInt(lastMenuItem.menuId.split('-')[1], 10);
-        newMenuId = `M-${String(lastMenuIdNumber + 1).padStart(4, '0')}`;
-      }
-  
-      this.menuId = newMenuId;
-      next();
+        const lastMenu = await this.constructor.findOne({}, {}, { sort: { 'menuId': -1 } });
+        let newMenuId = 'M-0001';
+
+        if (lastMenu && lastMenu.menuId) {
+            const lastIdNum = parseInt(lastMenu.menuId.split('-')[1], 10);
+            newMenuId = `M-${String(lastIdNum + 1).padStart(4, '0')}`;
+        }
+
+        this.menuId = newMenuId;
+        next();
     } catch (error) {
-      next(error);
+        next(error);
     }
-  });
+});
 
 module.exports = mongoose.model('Menu', menuSchema);

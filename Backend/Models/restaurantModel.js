@@ -1,7 +1,6 @@
-const mongoose = require('mongoose')
+const mongoose = require('mongoose');
 
-const resturantSchema = mongoose.Schema({
-
+const resturantSchema = new mongoose.Schema({
     resturantId: {
         type: String,
         unique: true
@@ -18,38 +17,41 @@ const resturantSchema = mongoose.Schema({
         type: String,
         required: true
     },
-    lat: { type: String, required: true },  
-    lng: { type: String, required: true },
-    admin:{
-        type:mongoose.Schema.ObjectId,
-        ref:'UserModel',
-        required:true
+    lat: { 
+        type: Number, // changed from String to Number (optional improvement)
+        required: true 
     },
-    status:{
-        type:String,
-        enum:['Opened','Closed'],
-        required:true,
+    lng: { 
+        type: Number, // changed from String to Number (optional improvement)
+        required: true 
     },
-    balance:{
-        type:Number,
-        default:0
+    admin: {
+        type: mongoose.Schema.ObjectId,
+        ref: 'UserModel',
+        required: true
     },
-
-})
+    status: {
+        type: String,
+        enum: ['Opened', 'Closed'],
+        required: true
+    },
+    balance: {
+        type: Number,
+        default: 0
+    }
+});
 
 // Generate resturantId before saving
 resturantSchema.pre('save', async function (next) {
-    if (!this.isNew) {
-        return next();
-    }
+    if (!this.isNew) return next();
 
     try {
         const lastResturant = await this.constructor.findOne({}, {}, { sort: { 'resturantId': -1 } });
-        let newResturantId = 'R-0001'; 
+        let newResturantId = 'R-0001';
 
         if (lastResturant && lastResturant.resturantId) {
-            const lastResturantIdNumber = parseInt(lastResturant.resturantId.split('-')[1], 10);
-            newResturantId = `R-${String(lastResturantIdNumber + 1).padStart(4, '0')}`;
+            const lastIdNum = parseInt(lastResturant.resturantId.split('-')[1], 10);
+            newResturantId = `R-${String(lastIdNum + 1).padStart(4, '0')}`;
         }
 
         this.resturantId = newResturantId;
@@ -59,4 +61,4 @@ resturantSchema.pre('save', async function (next) {
     }
 });
 
-module.exports = mongoose.model("Resturant", resturantSchema)
+module.exports = mongoose.model('Resturant', resturantSchema);
