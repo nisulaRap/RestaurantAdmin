@@ -18,11 +18,11 @@ const resturantSchema = new mongoose.Schema({
         required: true
     },
     lat: { 
-        type: Number, // changed from String to Number (optional improvement)
+        type: Number, 
         required: true 
     },
     lng: { 
-        type: Number, // changed from String to Number (optional improvement)
+        type: Number, 
         required: true 
     },
     admin: {
