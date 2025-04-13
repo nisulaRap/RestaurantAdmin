@@ -1,0 +1,164 @@
+import React, { useEffect, useState } from 'react';
+import { useParams, useNavigate } from 'react-router-dom';
+import axios from 'axios';
+import { toast } from 'react-toastify';
+import './UpdateMenu.css'; 
+import { assets } from '../../assets/assets'
+
+const UpdateMenu = () => {
+  const { id } = useParams();
+  const navigate = useNavigate();
+  const url = 'http://localhost:7001';
+
+  const [data, setData] = useState({
+    name: '',
+    description: '',
+    price: '',
+    category: '',
+  });
+
+  const [currentImage, setCurrentImage] = useState('');
+  const [newImage, setNewImage] = useState(null);
+
+  useEffect(() => {
+    const fetchMenu = async () => {
+      try {
+        const res = await axios.get(`${url}/api/menu/item/${id}`);
+        if (res.data.success) {
+          const { name, description, price, category, image } = res.data.data;
+          setData({ name, description, price, category });
+          setCurrentImage(image); 
+        } else {
+          toast.error('Failed to fetch menu item');
+        }
+      } catch (error) {
+        console.error(error);
+        toast.error('Server error');
+      }
+    };
+
+    fetchMenu();
+  }, [id]);
+
+  const onChangeHandler = (e) => {
+    setData({ ...data, [e.target.name]: e.target.value });
+  };
+
+  const onSubmitHandler = async (e) => {
+    e.preventDefault();
+
+    const formData = new FormData();
+    formData.append('name', data.name);
+    formData.append('description', data.description);
+    formData.append('price', data.price);
+    formData.append('category', data.category);
+    if (newImage) {
+      formData.append('image', newImage);
+    }
+
+    try {
+      const res = await axios.put(`${url}/api/menu/update/${id}`, formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      });
+
+      if (res.data.success) {
+        toast.success('Menu item updated successfully');
+        navigate('/menu-list');
+      } else {
+        toast.error('Failed to update menu item');
+      }
+    } catch (error) {
+      console.error(error);
+      toast.error('Server error');
+    }
+  };
+
+  return (
+    <div className='add'>
+      <h3>Update Menu</h3><br />
+      <form className='flex-col' onSubmit={onSubmitHandler}>
+        <div className='add-img-upload flex-col'>
+          <p>Upload Image</p>
+          <label htmlFor='image'>
+            <img
+              src={
+                newImage
+                  ? URL.createObjectURL(newImage)
+                  : `${url}/images/${currentImage}` || assets.upload_icon
+              }
+              alt='Menu'
+            />
+          </label>
+          <input
+            type='file'
+            id='image'
+            hidden
+            accept='image/*'
+            onChange={(e) => setNewImage(e.target.files[0])}
+          />
+        </div>
+
+        <div className='add-product-name flex-col'>
+          <p>Product Name</p>
+          <input
+            type='text'
+            name='name'
+            placeholder='Enter Product Name'
+            value={data.name}
+            onChange={onChangeHandler}
+            required
+          />
+        </div>
+
+        <div className='add-product-description flex-col'>
+          <p>Product Description</p>
+          <textarea
+            name='description'
+            rows='10'
+            placeholder='Enter Product Description'
+            value={data.description}
+            onChange={onChangeHandler}
+            required
+          ></textarea>
+        </div>
+
+        <div className='add-category-price'>
+          <div className='add-category flex-col'>
+            <p>Category</p>
+            <select
+              name='category'
+              value={data.category}
+              onChange={onChangeHandler}
+              required
+            >
+              <option value=''>Select Category</option>
+              <option value='Sides'>Sides</option>
+              <option value='Pizza'>Pizza</option>
+              <option value='Dessert'>Dessert</option>
+              <option value='Beverage'>Beverage</option>
+              <option value='Soup'>Soup</option>
+            </select>
+          </div>
+
+          <div className='add-price flex-col'>
+            <p>Price (Rs.)</p>
+            <input
+              type='number'
+              name='price'
+              placeholder='Enter Price'
+              value={data.price}
+              onChange={onChangeHandler}
+              required
+            />
+          </div>
+        </div>
+
+        <button type='submit' className='add-btn'>UPDATE</button>
+      </form>
+    </div>
+  );
+};
+
+export default UpdateMenu;

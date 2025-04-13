@@ -11,6 +11,14 @@ const Sidebar = () => {
           <img className='dashboard' src={assets.dashboard_icon} alt='' />
           <p>Dashboard</p>
         </NavLink>
+        <NavLink to='/addrestaurant' className='sidebar-option'>
+          <img className='add-menu' src={assets.add_icon} alt='' />
+          <p>Add Restaurant</p>
+        </NavLink>
+        <NavLink to='/restaurantlists' className='sidebar-option'>
+          <img className='menu-lists' src={assets.menu_icon} alt='' />
+          <p>Restaurant Items</p>
+        </NavLink>
         <NavLink to='/addmenu' className='sidebar-option'>
           <img className='add-menu' src={assets.add_icon} alt='' />
           <p>Add Menu</p>

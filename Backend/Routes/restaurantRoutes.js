@@ -1,22 +1,22 @@
 const express = require('express');
 const router = express.Router();
-const { addResturant, getAllResturants, getResturantById, updateResturant, deleteResturant } = require('../Controllers/resturantController');
+const { addRestaurant, getAllRestaurants, getRestaurantById, updateRestaurant, deleteRestaurant } = require('../Controllers/restaurantController');
 const multer = require('multer');
 
 // Image storage configuration
 const storage = multer.diskStorage({
     destination: "uploads",
     filename: function (req, file, cb) {
-        cb(null, `${Date.now()}-${file.originalname}`);
+        return cb(null, `${Date.now()}-${file.originalname}`);
     }
 });
 
 const upload = multer({ storage: storage });
 
-router.post('/add', upload.single("resturantPhoto"), addResturant);
-router.get('/list', getAllResturants);
-router.get('/list/:id', getResturantById);
-router.put('/update/:id', upload.single("resturantPhoto"), updateResturant);
-router.delete('/delete/:id', deleteResturant);
+router.post('/add', upload.single("restaurantPhoto"), addRestaurant);
+router.get('/list', getAllRestaurants);
+router.get('/list/:id', getRestaurantById);
+router.put('/update/:id', upload.single("restaurantPhoto"), updateRestaurant);
+router.delete('/delete/:id', deleteRestaurant);
 
 module.exports = router;

@@ -1,27 +1,31 @@
 const Menu = require('../Models/menuModel');
-const Resturant = require('../Models/resturantModel');
+const Resturant = require('../Models/restaurantModel');
 const fs = require('fs');
 
 const addFood = async (req, res) => {
-    let image_filename = req.file.filename;
-
-    const resturantId = req.body.resturantId;
-
-    const restaurant = await Resturant.findById(resturantId);
-    if (!restaurant) {
-        return res.status(404).json({ success: false, message: 'Restaurant not found' });
-    }
-
-    const food = new Menu({
-        name: req.body.name,
-        description: req.body.description,
-        price: req.body.price,
-        image: image_filename,
-        category: req.body.category,
-        resturantId: resturantId
-    });
-
     try {
+        let image_filename = req.file.filename;
+
+        const restaurantId = req.body.restaurantId;
+
+        if (!restaurantId) {
+            return res.status(400).json({ success: false, message: 'Restaurant ID is required' });
+        }
+
+        const restaurant = await Resturant.findById(restaurantId);
+        if (!restaurant) {
+            return res.status(404).json({ success: false, message: 'Restaurant not found' });
+        }
+
+        const food = new Menu({
+            name: req.body.name,
+            description: req.body.description,
+            price: req.body.price,
+            image: image_filename,
+            category: req.body.category,
+            restaurantId: restaurantId
+        });
+
         await food.save();
         res.status(200).json({ success: true, message: 'Food added successfully' });
     } catch (error) {
@@ -29,6 +33,7 @@ const addFood = async (req, res) => {
         res.status(500).json({ success: false, message: 'Error adding food' });
     }
 };
+
 
 const getAllFood = async (req, res) => {
     const resturantId = req.params.resturantId;
@@ -91,4 +96,20 @@ const deleteFood = async (req, res) => {
     }
 };
 
-module.exports = { addFood, getAllFood, updateFood, deleteFood };
+const searchFood = async (req, res) => {
+    const { query, resturantId } = req.query;
+
+    try {
+        const foods = await Menu.find({
+            name: { $regex: query, $options: 'i' },
+            resturantId
+        });
+
+        res.status(200).json({ success: true, data: foods });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ success: false, message: 'Error searching food' });
+    }
+};
+
+module.exports = { addFood, getAllFood, updateFood, deleteFood, searchFood };

@@ -9,6 +9,9 @@ import Dashboard from './Pages/Dashboard/Dashboard'
 import Addmenu from './Pages/AddMenu/Addmenu'
 import Menulists from './Pages/Menulists/Menulists'
 import Orders from './Pages/Orders/Orders'
+import UpdateMenu from './Pages/UpdateMenu/UpdateMenu'
+import AddRestaurant from './Pages/AddRestaurant/AddRestaurant';
+import Restaurantlists from './Pages/Restaurantlists/Restaurantlists';
 
 const App = () => {
   return (
@@ -21,8 +24,11 @@ const App = () => {
         <Routes>
           <Route path="/" element={<Dashboard />} />
           <Route path="/addmenu" element={<Addmenu />} />
+          <Route path="/update/:id" element={<UpdateMenu />} />
           <Route path="/menulists" element={<Menulists />} />
           <Route path="/orders" element={<Orders />} />
+          <Route path="/addrestaurant" element={<AddRestaurant />} />
+          <Route path="/restaurantlists" element={<Restaurantlists />} />
         </Routes>
       </div>
     </div>

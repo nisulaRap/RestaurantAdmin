@@ -5,7 +5,7 @@ const menuSchema = new mongoose.Schema({
         type: String,
         unique: true
     },
-    resturantId: {
+    restaurantId: {
         type: mongoose.Schema.ObjectId,
         ref: 'Resturant',
         required: true

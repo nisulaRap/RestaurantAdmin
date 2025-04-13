@@ -1,64 +1,66 @@
 const mongoose = require('mongoose');
 
-const resturantSchema = new mongoose.Schema({
-    resturantId: {
+const restaurantSchema = new mongoose.Schema({
+    restaurantId: {
         type: String,
         unique: true
     },
-    resturantName: {
+    restaurantName: {
         type: String,
         required: true
     },
-    resturantLocation: {
+    restaurantLocation: {
         type: String,
         required: true
     },
-    resturantPhoto: {
+    restaurantPhoto: {
         type: String,
         required: true
     },
     lat: { 
-        type: Number, 
+        type: String, 
         required: true 
     },
     lng: { 
-        type: Number, 
+        type: String, 
         required: true 
     },
-    admin: {
+    /*admin: {
         type: mongoose.Schema.ObjectId,
         ref: 'UserModel',
         required: true
-    },
+    },*/
     status: {
         type: String,
         enum: ['Opened', 'Closed'],
         required: true
     },
-    balance: {
+    /*balance: {
         type: Number,
         default: 0
-    }
+    }*/
 });
 
-// Generate resturantId before saving
-resturantSchema.pre('save', async function (next) {
-    if (!this.isNew) return next();
+// Generate restaurantId before saving
+restaurantSchema.pre('save', async function(next) {
+    if(!this.isNew) {
+        return next();
+    }
 
-    try {
-        const lastResturant = await this.constructor.findOne({}, {}, { sort: { 'resturantId': -1 } });
-        let newResturantId = 'R-0001';
+    try{
+        const lastRestaurant = await this.constructor.findOne({}, {}, { sort: { 'restaurantId': -1 } });
+        let newRestaurantId = 'R-0001';
 
-        if (lastResturant && lastResturant.resturantId) {
-            const lastIdNum = parseInt(lastResturant.resturantId.split('-')[1], 10);
-            newResturantId = `R-${String(lastIdNum + 1).padStart(4, '0')}`;
-        }
+        if (lastRestaurant && lastRestaurant.restaurantId) {
+            const lastId = parseInt(lastRestaurant.restaurantId.split('-')[1], 10);
+            newRestaurantId = `R-${String(lastId + 1).padStart(4, '0')}`;
+        } 
 
-        this.resturantId = newResturantId;
+        this.restaurantId = newRestaurantId;
         next();
     } catch (error) {
         next(error);
     }
 });
 
-module.exports = mongoose.model('Resturant', resturantSchema);
+module.exports = mongoose.model('Restaurant', restaurantSchema);
