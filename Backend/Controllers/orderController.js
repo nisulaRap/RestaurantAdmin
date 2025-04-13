@@ -40,7 +40,7 @@ const createOrder = async (req, res) => {
     }
 };
 
-const listOrders = async (requestAnimationFrame, res) => {
+const listOrders = async (req, res) => {
     try{
         const orders = await Order.find({});
         res.status(200).json({ success:true, data:orders })
