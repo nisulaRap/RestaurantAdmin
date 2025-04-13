@@ -6,7 +6,6 @@ import { toast } from 'react-toastify';
 
 const Addmenu = () => {
     const url = "http://localhost:7001";
-    const restaurantId = localStorage.getItem("restaurantId");
 
     const [image, setImage] = useState(null);
     const [data, setData] = useState({
@@ -35,7 +34,7 @@ const Addmenu = () => {
         formData.append('description', data.description);
         formData.append('category', data.category);
         formData.append('price', Number(data.price));
-        formData.append('restaurantId', restaurantId);
+        formData.append('restaurantId', data.restaurantId);
 
         try {
             const response = await axios.post(`${url}/api/menu/add`, formData);
@@ -74,6 +73,15 @@ const Addmenu = () => {
                     />
                 </div>
                 <div className='add-product-name flex-col'>
+                    <p>Restaurant ID</p>
+                    <input
+                        onChange={onChangeHandler} 
+                        value={data.restaurantId} 
+                        type='text' 
+                        name='restaurantId' 
+                        placeholder='Enter Restaurant ID' 
+                        required
+                    />
                     <p>Product Name</p>
                     <input 
                         onChange={onChangeHandler} 

@@ -2,16 +2,22 @@ const Restaurant = require('../Models/restaurantModel');
 const fs = require('fs');
 
 const addRestaurant = async (req, res) => {
-  let image_filename = req.file?.filename;
+  let image_filename = req.file.filename;
 
   try {
+    const { restaurantName, restaurantLocation, lat, lng, status } = req.body; 
+    
+    if (!restaurantName || !restaurantLocation || !lat || !lng || !status) {
+      return res.status(400).json({ success: false, message: 'All fields are required' });
+    }
+
     const newRestaurant = new Restaurant({
-      restaurantName: req.body.restaurantName,
-      restaurantLocation: req.body.restaurantLocation,
+      restaurantName,
+      restaurantLocation,
       restaurantPhoto: image_filename,
-      lat: req.body.lat,
-      lng: req.body.lng,
-      status: req.body.status,
+      lat,
+      lng,
+      status,
     });
 
     await newRestaurant.save();

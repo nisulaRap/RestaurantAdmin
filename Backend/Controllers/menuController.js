@@ -1,21 +1,9 @@
 const Menu = require('../Models/menuModel');
-const Resturant = require('../Models/restaurantModel');
 const fs = require('fs');
 
 const addFood = async (req, res) => {
     try {
         let image_filename = req.file.filename;
-
-        const restaurantId = req.body.restaurantId;
-
-        if (!restaurantId) {
-            return res.status(400).json({ success: false, message: 'Restaurant ID is required' });
-        }
-
-        const restaurant = await Resturant.findById(restaurantId);
-        if (!restaurant) {
-            return res.status(404).json({ success: false, message: 'Restaurant not found' });
-        }
 
         const food = new Menu({
             name: req.body.name,
@@ -23,7 +11,7 @@ const addFood = async (req, res) => {
             price: req.body.price,
             image: image_filename,
             category: req.body.category,
-            restaurantId: restaurantId
+            restaurantId: req.body.restaurantId
         });
 
         await food.save();
