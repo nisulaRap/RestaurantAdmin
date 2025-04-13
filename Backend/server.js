@@ -12,6 +12,7 @@ const corsOptions = {
 };
 
 // import routes
+const resturantRoutes = require('./Routes/resturantRoutes');
 const menuRoutes = require('./Routes/menuRoutes');
 const orderRoutes = require('./Routes/orderRoutes');
 
@@ -19,6 +20,7 @@ app.use(cors(corsOptions));
 app.use(express.json());    
 
 // api endpoints
+app.use('/api/resturant', resturantRoutes);
 app.use('/api/menu', menuRoutes);
 app.use('/images', express.static('uploads'));
 app.use('/api/order', orderRoutes);
