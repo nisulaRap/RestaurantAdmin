@@ -70,6 +70,7 @@ const Addmenu = () => {
                         type='file' 
                         id='image' 
                         hidden 
+                        required
                     />
                 </div>
                 <div className='add-product-name flex-col'>

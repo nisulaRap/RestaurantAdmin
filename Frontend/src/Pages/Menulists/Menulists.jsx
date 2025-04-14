@@ -8,17 +8,13 @@ const Menulists = () => {
   const url = 'http://localhost:7001';
   const [list, setList] = useState([]);
   const [search, setSearch] = useState('');
-  const [restaurantId, setRestaurantId] = useState('');
+  const [notFound, setNotFound] = useState('');
   const navigate = useNavigate();
 
-  const fetchList = async () => {
-    if (!restaurantId) {
-      toast.warning('Please enter Restaurant ID');
-      return;
-    }
-
+  // Fetch all menu items initially
+  const fetchAllMenus = async () => {
     try {
-      const response = await axios.get(`${url}/api/menu/list/${restaurantId}`);
+      const response = await axios.get(`${url}/api/menu/list`);
       if (response.data.success) {
         setList(response.data.data);
       } else {
@@ -35,7 +31,7 @@ const Menulists = () => {
       const response = await axios.delete(`${url}/api/menu/delete/${menuId}`);
       if (response.data.success) {
         toast.success(response.data.message);
-        fetchList();
+        fetchAllMenus();
       } else {
         toast.error('Error deleting menu');
       }
@@ -46,15 +42,22 @@ const Menulists = () => {
   };
 
   const searchFood = async () => {
-    if (!restaurantId) {
-      toast.warning('Enter Restaurant ID first');
+    if (!search.trim()) {
+      fetchAllMenus();
+      setNotFound("");
       return;
     }
 
     try {
-      const response = await axios.get(`${url}/api/menu/search?query=${search}&resturantId=${restaurantId}`);
+      const response = await axios.get(`${url}/api/menu/search?query=${search}`);
       if (response.data.success) {
-        setList(response.data.data);
+        const data = response.data.data;
+        if (data.length === 0) {
+          setNotFound("No results found");
+        } else {
+          setList(data);
+          setNotFound("");
+        }
       } else {
         toast.error('Search failed');
       }
@@ -64,35 +67,33 @@ const Menulists = () => {
     }
   };
 
+  useEffect(() => {
+    fetchAllMenus();
+  }, []);
+
   return (
     <div className="list add flex-col">
       <h3>Restaurant Menu List</h3>
-
-      {/* Restaurant ID input */}
-      <div className="search-bar">
-        <input
-          type="text"
-          placeholder="Enter Restaurant ID"
-          value={restaurantId}
-          onChange={(e) => setRestaurantId(e.target.value)}
-        />
-        <button onClick={fetchList}>Load Menu</button>
-      </div>
 
       {/* Search Bar */}
       <div className="search-bar">
         <input
           type="text"
-          placeholder="Search food by name..."
+          placeholder="Search by name, menu ID, category, or restaurant ID..."
           value={search}
           onChange={(e) => setSearch(e.target.value)}
         />
         <button onClick={searchFood}>Search</button>
       </div>
 
+      {notFound && (
+        <p style={{ color: 'red', marginTop: '10px' }}>{notFound}</p>
+      )}
+
       {/* Table */}
       <div className="list-table">
         <div className="list-table-format title">
+          <b>Menu ID</b>
           <b>Image</b>
           <b>Menu Name</b>
           <b>Category</b>
@@ -102,14 +103,15 @@ const Menulists = () => {
         </div>
         {list.map((item, index) => (
           <div key={index} className="list-table-format">
+            <p>{item.menuId}</p>
             <img src={`${url}/images/${item.image}`} alt={item.name} />
             <p>{item.name}</p>
             <p>{item.category}</p>
             <p>Rs. {item.price}</p>
-            <p>{item.resturantId}</p>
-            <div>
-              <p className="cursor" onClick={() => navigate(`/update/${item._id}`)}>Update</p>
-              <p className="cursor" onClick={() => deleteMenu(item._id)}>Delete</p>
+            <p>{item.restaurantId}</p>
+            <div className='list-coloumn'>
+              <p className="cursor1" onClick={() => navigate(`/update/${item._id}`)}>Update</p>
+              <p className="cursor2" onClick={() => deleteMenu(item._id)}>Delete</p>
             </div>
           </div>
         ))}

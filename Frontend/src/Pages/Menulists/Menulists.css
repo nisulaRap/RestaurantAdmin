@@ -1,6 +1,6 @@
 .list-table-format {
     display: grid;
-    grid-template-columns: 0.5fr 2fr 1fr 1fr 1fr 1fr;
+    grid-template-columns: 0.5fr 0.5fr 2fr 1fr 1fr 1fr 1fr;
     align-items: center;
     gap: 10px;
     padding: 12px 15px;
@@ -22,11 +22,12 @@
     display: flex;
     gap: 10px;
     margin: 10px 0;
+    justify-content: center;
   }
   
   .search-bar input {
     padding: 8px;
-    width: 250px;
+    width: 400px;
     border: 1px solid #ccc;
     border-radius: 4px;
   }
@@ -44,11 +45,24 @@
     background-color: #0056b3;
   }
   
-  .cursor {
+  .cursor1 {
     cursor: pointer;
-    color: #007bff;
+    color: rgb(73, 24, 220);
+  }
+
+  .cursor2 {
+    cursor: pointer;
+    color: red;
   }
 /* end */  
+
+.list-coloumn{
+  display: grid;
+    grid-template-columns: 0.5fr 0.5fr;
+    align-items: center;
+    gap: 10px;
+    font-size: 14px;
+}
 
 @media (max-width: 600px){
     .list-table-format {

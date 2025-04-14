@@ -3,7 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 import './UpdateMenu.css'; 
-import { assets } from '../../assets/assets'
+import { assets } from '../../assets/assets';
 
 const UpdateMenu = () => {
   const { id } = useParams();
@@ -15,6 +15,7 @@ const UpdateMenu = () => {
     description: '',
     price: '',
     category: '',
+    restaurantId: ''
   });
 
   const [currentImage, setCurrentImage] = useState('');
@@ -23,11 +24,18 @@ const UpdateMenu = () => {
   useEffect(() => {
     const fetchMenu = async () => {
       try {
-        const res = await axios.get(`${url}/api/menu/item/${id}`);
-        if (res.data.success) {
-          const { name, description, price, category, image } = res.data.data;
-          setData({ name, description, price, category });
-          setCurrentImage(image); 
+        const res = await axios.get(`${url}/api/menu/list/${id}`);
+        if (res.data.success && res.data.data) {
+          const { name, description, price, category, restaurantId, image } = res.data.data;
+
+          setData({
+            name: name || '',
+            description: description || '',
+            price: price || '',
+            category: category || '',
+            restaurantId: restaurantId || ''
+          });
+          setCurrentImage(image || '');
         } else {
           toast.error('Failed to fetch menu item');
         }
@@ -41,7 +49,8 @@ const UpdateMenu = () => {
   }, [id]);
 
   const onChangeHandler = (e) => {
-    setData({ ...data, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    setData(prev => ({ ...prev, [name]: value }));
   };
 
   const onSubmitHandler = async (e) => {
@@ -52,6 +61,7 @@ const UpdateMenu = () => {
     formData.append('description', data.description);
     formData.append('price', data.price);
     formData.append('category', data.category);
+    formData.append('restaurantId', data.restaurantId);
     if (newImage) {
       formData.append('image', newImage);
     }
@@ -65,7 +75,7 @@ const UpdateMenu = () => {
 
       if (res.data.success) {
         toast.success('Menu item updated successfully');
-        navigate('/menu-list');
+        navigate('/menulists');
       } else {
         toast.error('Failed to update menu item');
       }
@@ -86,7 +96,9 @@ const UpdateMenu = () => {
               src={
                 newImage
                   ? URL.createObjectURL(newImage)
-                  : `${url}/images/${currentImage}` || assets.upload_icon
+                  : currentImage
+                  ? `${url}/images/${currentImage}`
+                  : assets.upload_icon
               }
               alt='Menu'
             />
@@ -95,18 +107,27 @@ const UpdateMenu = () => {
             type='file'
             id='image'
             hidden
-            accept='image/*'
             onChange={(e) => setNewImage(e.target.files[0])}
           />
         </div>
 
         <div className='add-product-name flex-col'>
+          <p>Restaurant ID</p>
+          <input
+            onChange={onChangeHandler}
+            value={data.restaurantId || ''}
+            type='text'
+            name='restaurantId'
+            placeholder='Enter Restaurant ID'
+            required
+          />
+
           <p>Product Name</p>
           <input
             type='text'
             name='name'
             placeholder='Enter Product Name'
-            value={data.name}
+            value={data.name || ''}
             onChange={onChangeHandler}
             required
           />
@@ -118,7 +139,7 @@ const UpdateMenu = () => {
             name='description'
             rows='10'
             placeholder='Enter Product Description'
-            value={data.description}
+            value={data.description || ''}
             onChange={onChangeHandler}
             required
           ></textarea>
@@ -129,7 +150,7 @@ const UpdateMenu = () => {
             <p>Category</p>
             <select
               name='category'
-              value={data.category}
+              value={data.category || ''}
               onChange={onChangeHandler}
               required
             >
@@ -148,7 +169,7 @@ const UpdateMenu = () => {
               type='number'
               name='price'
               placeholder='Enter Price'
-              value={data.price}
+              value={data.price || ''}
               onChange={onChangeHandler}
               required
             />
