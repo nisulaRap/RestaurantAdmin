@@ -103,7 +103,7 @@ const Restaurantlists = () => {
             <p>{item.restaurantName}</p>
             <p>{item.restaurantLocation}</p>
             <div className="list-coloumn">
-              <p className="cursor1" onClick={() => navigate(`/update/${item._id}`)}>Update</p>
+              <p className="cursor1" onClick={() => navigate(`/updaterestaurant/${item._id}`)}>Update</p>
               <p className="cursor2" onClick={() => deleteRestaurant(item._id)}>Delete</p>
             </div>
           </div>

@@ -12,6 +12,7 @@ import Orders from './Pages/Orders/Orders'
 import UpdateMenu from './Pages/UpdateMenu/UpdateMenu'
 import AddRestaurant from './Pages/AddRestaurant/AddRestaurant';
 import Restaurantlists from './Pages/Restaurantlists/Restaurantlists';
+import UpdateRestaurant from './Pages/UpdateRestaurant/UpdateRestaurant';
 
 const App = () => {
   return (
@@ -29,6 +30,7 @@ const App = () => {
           <Route path="/orders" element={<Orders />} />
           <Route path="/addrestaurant" element={<AddRestaurant />} />
           <Route path="/restaurantlists" element={<Restaurantlists />} />
+          <Route path="/updaterestaurant/:id" element={<UpdateRestaurant />} />
         </Routes>
       </div>
     </div>

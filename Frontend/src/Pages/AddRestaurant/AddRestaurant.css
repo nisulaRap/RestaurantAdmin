@@ -27,8 +27,10 @@
 }
 
 .add-status select {
+    margin-top: 10px;
     max-width: 180px;
     padding: 10px;
+    margin-bottom: 10px;
 }
 
 .add-btn {
