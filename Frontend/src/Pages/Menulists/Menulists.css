@@ -5,7 +5,7 @@
     gap: 10px;
     padding: 12px 15px;
     border: 1px solid #cacaca;
-    font-size: 13px;
+    font-size: 15px;
 }
 
 .list-table-format.title{
@@ -16,7 +16,11 @@
     width: 50px;
 }
 
-/* added */
+.menuImage {
+    width: 60px;
+    height: 50px;
+    border-radius: 5px;
+}
 
 .search-bar {
     display: flex;
@@ -30,6 +34,7 @@
     width: 400px;
     border: 1px solid #ccc;
     border-radius: 4px;
+    font-size: 14px;
   }
   
   .search-bar button {
@@ -39,6 +44,7 @@
     border: none;
     border-radius: 4px;
     cursor: pointer;
+    font-size: 14px;
   }
   
   .search-bar button:hover {
@@ -54,7 +60,6 @@
     cursor: pointer;
     color: red;
   }
-/* end */  
 
 .list-coloumn{
   display: grid;

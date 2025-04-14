@@ -73,7 +73,7 @@ const Menulists = () => {
 
   return (
     <div className="list add flex-col">
-      <h3>Restaurant Menu List</h3>
+      <h3>Menu Lists</h3>
 
       {/* Search Bar */}
       <div className="search-bar">
@@ -104,7 +104,7 @@ const Menulists = () => {
         {list.map((item, index) => (
           <div key={index} className="list-table-format">
             <p>{item.menuId}</p>
-            <img src={`${url}/images/${item.image}`} alt={item.name} />
+            <img className="menuImage" src={`${url}/images/${item.image}`} alt={item.name} />
             <p>{item.name}</p>
             <p>{item.category}</p>
             <p>Rs. {item.price}</p>

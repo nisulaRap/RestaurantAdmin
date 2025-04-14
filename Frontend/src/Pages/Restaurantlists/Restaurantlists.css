@@ -28,6 +28,7 @@
     width: 400px;
     border: 1px solid #ccc;
     border-radius: 4px;
+    font-size: 14px;
   }
   
   .search-bar button {
@@ -37,6 +38,7 @@
     border: none;
     border-radius: 4px;
     cursor: pointer;
+    font-size: 14px;
   }
   
   .search-bar button:hover {
