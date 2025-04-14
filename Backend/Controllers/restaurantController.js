@@ -25,7 +25,7 @@ const addRestaurant = async (req, res) => {
     res.status(201).json({ success: true, message: 'Restaurant added successfully' });
   } catch (error) {
     console.error('Error while saving restaurant:', error.message);
-    res.status(500).json({ success: false, message: 'Error adding restaurant', error: error.message });
+    res.status(500).json({ success: false, message: 'Error adding restaurant' });
   }
 };
 
