@@ -52,8 +52,8 @@ restaurantSchema.pre('save', async function(next) {
         let newRestaurantId = 'R-0001';
 
         if (lastRestaurant && lastRestaurant.restaurantId) {
-            const lastId = parseInt(lastRestaurant.restaurantId.split('-')[1], 10);
-            newRestaurantId = `R-${String(lastId + 1).padStart(4, '0')}`;
+            const lastIdNum = parseInt(lastRestaurant.restaurantId.split('-')[1], 10);
+            newRestaurantId = `R-${String(lastIdNum + 1).padStart(4, '0')}`;
         } 
 
         this.restaurantId = newRestaurantId;
