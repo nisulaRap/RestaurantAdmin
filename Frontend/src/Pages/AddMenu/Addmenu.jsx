@@ -104,8 +104,7 @@ const Addmenu = () => {
                         required
                     ></textarea>
                 </div>
-                <div className='add-category-price'>
-                    <div className='add-category flex-col'>
+                <div className='add-category flex-col'>
                         <p>Category</p>
                         <select 
                             onChange={onChangeHandler} 
@@ -132,8 +131,7 @@ const Addmenu = () => {
                             required 
                         />
                     </div>
-                </div>
-                <button type='submit' className='add-btn'>ADD</button>
+                <button type='submit' className='add-btn'>Add Menu</button>
             </form>
         </div>
     );
