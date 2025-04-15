@@ -4,6 +4,7 @@
     padding: 20px 20px;
     color: #6d6d6d;
     width: 80vw;
+    height: auto;
 }
   
   .main-title {
@@ -70,6 +71,38 @@
     margin-bottom: 10px;
   }
 
+  .list-table3 {
+    margin-top: 60px;
+    margin-bottom: 50px;
+    margin-left: 50px;
+  }
+
+  .order-cap{
+    margin-bottom: 20px;
+  }
+
+  .list-table3-format {
+    display: grid;
+    grid-template-columns: 1fr 1fr 2fr 1fr 1fr 1fr;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 15px;
+    border: 1px solid #cacaca;
+    font-size: 15px;
+}
+
+.list-table3-format.title{
+    background-color: #f9f9f9;
+}
+
+.action-status {
+  background-color: #ffe8e4;
+    border: 1px solid tomato;
+    width: max(10vw, 120px);
+    padding: 10px;
+    outline: none;
+}
+
   @media screen and (max-width: 768px) {
     .main-cards {
       grid-template-columns: 1fr;
@@ -80,5 +113,14 @@
     .charts {
       grid-template-columns: 1fr;
       margin-top: 30px;
+    }
+
+
+    .list-table3-format {
+      grid-template-columns: 1fr 3fr 1fr;
+      gap: 15px;
+    }
+    .list-table3-format.title {
+        display: none;
     }
   }

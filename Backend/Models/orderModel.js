@@ -29,6 +29,11 @@ const orderSchema = new mongoose.Schema({
                 required: true
             },
 
+            itemName: {
+                type: String,
+                required: true
+            },
+
             quantity: {
                 type: Number,
                 required: true,

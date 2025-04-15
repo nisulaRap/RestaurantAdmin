@@ -12,7 +12,7 @@ const Sidebar = () => {
           <p>Dashboard</p>
         </NavLink>
         <NavLink to='/addrestaurant' className='sidebar-option'>
-          <img className='add-menu' src={assets.add_icon} alt='' />
+          <img className='add-menu' src={assets.restaurant_icon} alt='' />
           <p>Add Restaurant</p>
         </NavLink>
         <NavLink to='/restaurantlists' className='sidebar-option'>

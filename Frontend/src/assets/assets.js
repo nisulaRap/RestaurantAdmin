@@ -6,6 +6,7 @@ import order_icon from './order_icon.png';
 import upload_icon from './uploadfile-icon.png';
 import parcel_icon from './food_parcel_icon.png';
 import dashboard_icon from './dashboard_icon.png';
+import restaurant_icon from './restaurant_icon.png';
 
 export const assets = {
     logo,
@@ -15,5 +16,6 @@ export const assets = {
     order_icon,
     upload_icon,
     parcel_icon,
-    dashboard_icon
+    dashboard_icon,
+    restaurant_icon
 };

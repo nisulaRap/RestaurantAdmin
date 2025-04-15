@@ -54,7 +54,6 @@ const Orders = () => {
             <div>
               <p className='order-item-id'><strong>Order ID:</strong> {order.orderId}</p>
               <p className='order-customer-id'><strong>Customer ID:</strong> {order.customerId}</p>
-              <p className='order-restaurant-id'><strong>Restaurant ID:</strong> {order.restaurantId}</p>
               <p className='order-item-address'><strong>Payment Status:</strong> {order.paymentStatus}</p>
               <p className='order-item-address'><strong>Order Time:</strong> {new Date(order.orderTime).toLocaleString()}</p>
               <p className='order-item-phone'><strong>Order Status:</strong> {order.orderStatus}</p>
@@ -64,7 +63,7 @@ const Orders = () => {
               <p>Menu Item x Quantity:</p>
                 {order.items.map((item, itemIndex) => (
                   <span key={itemIndex}>
-                    {item.itemId} x {item.quantity}
+                    {item.itemName} x {item.quantity}
                     {itemIndex !== order.items.length - 1 ? ', ' : ''}
                   </span>
                 ))}

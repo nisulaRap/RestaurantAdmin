@@ -39,7 +39,7 @@ const getPopularMenuItems = async (req, res) => {
         }},
         { $unwind: '$menuDetails' },
         { $project: {
-          itemId: '$menuDetails.name',
+          itemName: '$menuDetails.name',
           count: 1
         }},
         { $sort: { count: -1 } }, 
