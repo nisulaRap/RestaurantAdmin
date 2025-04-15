@@ -6,7 +6,6 @@ import axios from 'axios';
 
 const Dashboard = () => {
   const url = "http://localhost:7001";
-  // State variables for the dashboard data
   const [dashboardStats, setDashboardStats] = useState({
     restaurantCount: 0,
     menuCount: 0,
@@ -15,7 +14,6 @@ const Dashboard = () => {
   const [popularMenuItems, setPopularMenuItems] = useState([]);
   const [orderTrends, setOrderTrends] = useState([]);
 
-  // Fetch data when the component is mounted
   useEffect(() => {
     // Fetch dashboard stats
     axios.get(`${url}/api/dashboard/stats`)
@@ -45,15 +43,14 @@ const Dashboard = () => {
       });
   }, []);
 
-  // Sample data format for charts (use your fetched data)
   const orderTrendsChartData = orderTrends.map(trend => ({
     name: trend._id,
     orderCount: trend.orderCount
   }));
 
   const popularMenuItemsChartData = popularMenuItems.map(item => ({
-    name: item.name, // Replace 'name' with the field representing menu item name
-    orderCount: item.orderCount // Replace 'orderCount' with the field for the number of orders
+    name: item.name, 
+    orderCount: item.orderCount 
   }));
 
   return (
