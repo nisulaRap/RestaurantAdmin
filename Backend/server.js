@@ -1,6 +1,8 @@
 const mongoose = require('mongoose');
 const express = require('express');
 const cors = require('cors');
+const path = require('path');
+const cookieParser = require('cookie-parser');
 const dotenv = require('dotenv');
 dotenv.config();
 
@@ -12,6 +14,7 @@ const corsOptions = {
 };
 
 // import routes
+const userRoutes = require('./Routes/userRoutes');
 const menuRoutes = require('./Routes/menuRoutes');
 const orderRoutes = require('./Routes/orderRoutes');
 const restaurantRoutes = require('./Routes/restaurantRoutes');
@@ -19,8 +22,10 @@ const dashboardRoutes = require('./Routes/dashboardRoutes');
 
 app.use(cors(corsOptions));
 app.use(express.json());    
+app.use(cookieParser());
 
 // api endpoints
+app.use('/api/users', userRoutes);
 app.use('/api/restaurant', restaurantRoutes);
 app.use('/api/menu', menuRoutes);
 app.use('/images', express.static('uploads'));

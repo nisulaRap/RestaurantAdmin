@@ -190,7 +190,6 @@ const Dashboard = () => {
           ))}
         </div>
       </div>
-    
   );
 }
 
