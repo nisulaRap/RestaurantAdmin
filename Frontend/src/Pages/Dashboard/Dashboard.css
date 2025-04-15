@@ -59,7 +59,16 @@
     margin-top: 60px;
     height: 300px;
   }
+
+  .pmenu-items {
+    margin-left: 50px;
+    margin-bottom: 10px;
+  }
   
+  .order-trends {
+    margin-left: 50px;
+    margin-bottom: 10px;
+  }
 
   @media screen and (max-width: 768px) {
     .main-cards {
