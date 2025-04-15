@@ -1,5 +1,6 @@
 import React from 'react'
-import Navbar from './Components/Navbar/Navbar'
+import Header from './Components/Header/Header'
+import Footer from './Components/Footer/Footer'
 import Sidebar from './Components/Sidebar/Sidebar'
 import { Routes, Route } from 'react-router-dom'
 import { ToastContainer } from 'react-toastify';
@@ -18,7 +19,7 @@ const App = () => {
   return (
     <div>
       <ToastContainer />
-      <Navbar /> 
+      <Header /> 
       <hr />
       <div className="app-content">
         <Sidebar />
@@ -33,6 +34,7 @@ const App = () => {
           <Route path="/updaterestaurant/:id" element={<UpdateRestaurant />} />
         </Routes>
       </div>
+      <Footer />
     </div>
   )
 }
