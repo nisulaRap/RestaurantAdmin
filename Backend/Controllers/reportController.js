@@ -121,7 +121,7 @@ const generateReport = async (req, res) => {
     doc.end();
 
     stream.on('finish', () => {
-      res.download(filePath, 'dashboard_report.pdf');
+      res.download(filePath, 'order_report.pdf');
     });
 
   } catch (error) {
