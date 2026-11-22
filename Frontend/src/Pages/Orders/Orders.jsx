@@ -40,7 +40,7 @@ const Orders = () => {
     try {
       const response = await axios.put(`${url}/api/order/${orderId}/status`, {
         orderStatus: newStatus
-      });
+      }, { withCredentials: true });
 
       if (response.data.success) {
         toast.success(`Order #${orderId} marked as ${newStatus}`);

@@ -9,7 +9,7 @@ import {
   FiLogOut, 
   FiUser, 
   FiCheckCircle, 
-  FiChevronDown 
+  FiChevronDown
 } from 'react-icons/fi';
 
 const Header = ({ sidebarOpen, setSidebarOpen }) => {

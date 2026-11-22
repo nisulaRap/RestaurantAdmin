@@ -40,14 +40,15 @@ const AddRestaurant = () => {
     setLoading(true);
     const formData = new FormData();
     formData.append('restaurantPhoto', image);
-    formData.append('restaurantName', data.restaurantName);
-    formData.append('restaurantLocation', data.restaurantLocation);  
-    formData.append('lat', data.lat);
-    formData.append('lng', data.lng);
-    formData.append('status', data.status);
+    formData.append('restaurantName', data.restaurantName.trim());
+    formData.append('restaurantLocation', data.restaurantLocation.trim());  
+    formData.append('lat', data.lat ? data.lat.trim() : "6.9271");
+    formData.append('lng', data.lng ? data.lng.trim() : "79.8612");
+    formData.append('status', data.status || "Opened");
 
     try {
       const response = await axios.post(`${url}/api/restaurant/add`, formData, {
+        withCredentials: true,
         headers: {
           'Content-Type': 'multipart/form-data'
         }
@@ -64,10 +65,11 @@ const AddRestaurant = () => {
         setImage(null);
         navigate('/restaurantlists');
       } else {
-        toast.error(response.data.message);
+        toast.error(response.data.message || "Failed to add restaurant");
       }
     } catch (error) {
-      toast.error(error.response?.data?.message || "Error adding restaurant.");
+      console.error('Add Restaurant Error:', error);
+      toast.error(error.response?.data?.message || error.message || "Error adding restaurant.");
     } finally {
       setLoading(false);
     }

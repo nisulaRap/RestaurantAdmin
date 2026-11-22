@@ -41,14 +41,19 @@ const Addmenu = () => {
     setLoading(true);
     const formData = new FormData();
     formData.append('image', image);
-    formData.append('name', data.name);
-    formData.append('description', data.description);
+    formData.append('name', data.name.trim());
+    formData.append('description', data.description ? data.description.trim() : '');
     formData.append('category', data.category);
     formData.append('price', Number(data.price));
-    formData.append('restaurantId', data.restaurantId);
+    formData.append('restaurantId', data.restaurantId ? data.restaurantId.trim() : 'DEFAULT');
 
     try {
-      const response = await axios.post(`${url}/api/menu/add`, formData);
+      const response = await axios.post(`${url}/api/menu/add`, formData, {
+        withCredentials: true,
+        headers: {
+          'Content-Type': 'multipart/form-data'
+        }
+      });
       if (response.data.success) {
         toast.success(response.data.message || "Menu item added successfully!");
         setData({
@@ -61,10 +66,11 @@ const Addmenu = () => {
         setImage(null);
         navigate('/menulists');
       } else {
-        toast.error(response.data.message);
+        toast.error(response.data.message || "Failed to add menu item");
       }
     } catch (error) {
-      toast.error("Something went wrong while adding food item.");
+      console.error('Add Menu Error:', error);
+      toast.error(error.response?.data?.message || error.message || "Something went wrong while adding food item.");
     } finally {
       setLoading(false);
     }

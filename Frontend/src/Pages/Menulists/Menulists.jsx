@@ -44,15 +44,15 @@ const Menulists = () => {
       return;
     }
     try {
-      const response = await axios.delete(`${url}/api/menu/delete/${menuId}`);
+      const response = await axios.delete(`${url}/api/menu/delete/${menuId}`, { withCredentials: true });
       if (response.data.success) {
         toast.success(response.data.message || 'Menu item removed');
         fetchAllMenus();
       } else {
-        toast.error('Error deleting menu');
+        toast.error(response.data.message || 'Error deleting menu');
       }
     } catch (error) {
-      toast.error('Server error deleting menu item');
+      toast.error(error.response?.data?.message || 'Server error deleting menu item');
     }
   };
 

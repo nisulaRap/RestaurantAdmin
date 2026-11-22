@@ -73,6 +73,7 @@ const UpdateMenu = () => {
 
     try {
       const res = await axios.put(`${url}/api/menu/update/${id}`, formData, {
+        withCredentials: true,
         headers: {
           'Content-Type': 'multipart/form-data'
         }
@@ -82,10 +83,11 @@ const UpdateMenu = () => {
         toast.success('Menu item updated successfully');
         navigate('/menulists');
       } else {
-        toast.error('Failed to update menu item');
+        toast.error(res.data.message || 'Failed to update menu item');
       }
     } catch (error) {
-      toast.error('Server error updating item');
+      console.error(error);
+      toast.error(error.response?.data?.message || 'Server error updating item');
     } finally {
       setLoading(false);
     }

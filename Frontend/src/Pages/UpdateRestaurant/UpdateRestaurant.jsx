@@ -73,6 +73,7 @@ const UpdateRestaurant = () => {
 
     try {
       const res = await axios.put(`${url}/api/restaurant/update/${id}`, formData, {
+        withCredentials: true,
         headers: {
           'Content-Type': 'multipart/form-data',
         },
@@ -82,10 +83,11 @@ const UpdateRestaurant = () => {
         toast.success('Restaurant updated successfully');
         navigate('/restaurantlists');
       } else {
-        toast.error('Failed to update restaurant');
+        toast.error(res.data.message || 'Failed to update restaurant');
       }
     } catch (error) {
-      toast.error('Server error updating restaurant');
+      console.error(error);
+      toast.error(error.response?.data?.message || 'Server error updating restaurant');
     } finally {
       setLoading(false);
     }

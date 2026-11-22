@@ -34,17 +34,19 @@ function Login() {
         return;
       }
 
-      login(token);
+      login(token, response.data.user);
       toast.success("Login successful! Welcome back.");
 
-      const decode = jwtDecode(token);
-      if (decode.role === 'SystemAdmin') {
+      const decode = response.data.user || jwtDecode(token);
+      const userRole = (decode.role || '').toLowerCase();
+
+      if (userRole === 'systemadmin') {
         navigate('/SystemAdmin');
-      } else if (decode.role === 'ResturantAdmin' || decode.role === 'RestaurantAdmin') {
+      } else if (userRole.includes('admin') || userRole.includes('restaurant')) {
         navigate('/');
-      } else if (decode.role === 'DeliveryPerson') {
+      } else if (userRole === 'deliveryperson') {
         navigate('/DeliveryPerson');
-      } else if (decode.role === 'Customer') {
+      } else if (userRole === 'customer') {
         navigate('/Customer');
       } else {
         navigate('/');
@@ -57,6 +59,12 @@ function Login() {
     }
   };
 
+  const handleDemoAccess = () => {
+    loginAsDemo();
+    toast.success("Signed in with Demo Admin access! Full permissions granted.");
+    navigate('/');
+  };
+
   return (
     <div className="login-page-wrapper">
       <div className="login-card-container card-box">
@@ -65,7 +73,7 @@ function Login() {
             <img src={assets.logo} alt="BigBite" className="login-brand-logo" />
           </div>
           <h2 className="login-title">Admin Portal</h2>
-          <p className="login-subtitle">Enter your credentials to access the management dashboard.</p>
+          <p className="login-subtitle">Sign in to manage restaurants, menus and incoming orders.</p>
         </div>
 
         <form onSubmit={loginForm} className="login-form-body">
@@ -75,7 +83,7 @@ function Login() {
               <FiUser className="input-icon" size={18} />
               <input 
                 type="text" 
-                placeholder="Enter username" 
+                placeholder="Enter admin username" 
                 value={name}
                 onChange={(e) => setName(e.target.value)} 
                 required 

@@ -222,6 +222,12 @@
   background: var(--danger-light);
 }
 
+.auth-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
 .login-nav-btn {
   padding: 8px 16px;
   font-size: 0.85rem;

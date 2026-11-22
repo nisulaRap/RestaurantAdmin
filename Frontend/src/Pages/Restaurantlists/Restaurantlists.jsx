@@ -41,15 +41,15 @@ const Restaurantlists = () => {
       return;
     }
     try {
-      const response = await axios.delete(`${url}/api/restaurant/delete/${restaurantId}`);
+      const response = await axios.delete(`${url}/api/restaurant/delete/${restaurantId}`, { withCredentials: true });
       if (response.data.success) {
         toast.success(response.data.message || 'Restaurant deleted successfully');
         fetchAllRestaurants();
       } else {
-        toast.error('Error deleting restaurant');
+        toast.error(response.data.message || 'Error deleting restaurant');
       }
     } catch (error) {
-      toast.error('Server error deleting restaurant');
+      toast.error(error.response?.data?.message || 'Server error deleting restaurant');
     }
   };
 
