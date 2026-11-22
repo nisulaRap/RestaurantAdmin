@@ -34,21 +34,15 @@ const menuSchema = new mongoose.Schema({
 
 // Generate menuId before saving
 menuSchema.pre('save', async function (next) {
-    if (!this.isNew) return next();
+    if (!this.isNew || this.menuId) return next();
 
     try {
-        const lastMenu = await this.constructor.findOne({}, {}, { sort: { 'menuId': -1 } });
-        let newMenuId = 'M-0001';
-
-        if (lastMenu && lastMenu.menuId) {
-            const lastIdNum = parseInt(lastMenu.menuId.split('-')[1], 10);
-            newMenuId = `M-${String(lastIdNum + 1).padStart(4, '0')}`;
-        }
-
-        this.menuId = newMenuId;
+        const count = await this.constructor.countDocuments();
+        this.menuId = `M-${String(count + 1).padStart(4, '0')}-${Date.now().toString().slice(-4)}`;
         next();
     } catch (error) {
-        next(error);
+        this.menuId = `M-${Date.now()}`;
+        next();
     }
 });
 

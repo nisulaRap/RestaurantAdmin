@@ -31,12 +31,22 @@ const login = async (req, res) => {
 
         res.cookie("token", token, {
             httpOnly: true,
-            sameSite: 'Strict',
+            sameSite: 'lax',
             secure: false,
-            maxAge: 2 * 60 * 60 * 1000 // 2 hours
+            maxAge: 7 * 24 * 60 * 60 * 1000 // 7 days
         });
 
-        res.status(200).json({ message: "Login successful", token });
+        res.status(200).json({ 
+            success: true, 
+            message: "Login successful", 
+            token,
+            user: {
+                id: existingUser._id,
+                name: existingUser.name,
+                email: existingUser.email,
+                role: existingUser.role
+            }
+        });
 
     } catch (err) {
         console.error("Login error:", err);
@@ -55,13 +65,16 @@ const logout = async (req, res) => {
 
 const checkToken = async (req, res) => {
     try {
-        const token = req.cookies.token;
-        if (!token) return res.status(401).json({ message: "No token found" });
+        let token = req.cookies?.token;
+        if (!token && req.headers.authorization && req.headers.authorization.startsWith('Bearer ')) {
+            token = req.headers.authorization.split(' ')[1];
+        }
+        if (!token) return res.status(401).json({ success: false, message: "No token found" });
 
         const decoded = jwt.verify(token, process.env.JWT_SECRET);
-        res.status(200).json({ message: "Token valid", user: decoded });
+        res.status(200).json({ success: true, message: "Token valid", user: decoded, token });
     } catch (err) {
-        res.status(401).json({ message: "Invalid or expired token" });
+        res.status(401).json({ success: false, message: "Invalid or expired token" });
     }
 };
 
