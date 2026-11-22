@@ -27,7 +27,7 @@ const menuSchema = new mongoose.Schema({
     },
     category: {
         type: String,
-        enum: ['Sides', 'Pizza', 'Dessert', 'Beverage', 'Soup'],
+        enum: ['Sides', 'Pizza', 'Dessert', 'Beverage', 'Soup', 'Dish'],
         required: true
     }
 });
