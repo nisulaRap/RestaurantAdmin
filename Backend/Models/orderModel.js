@@ -101,25 +101,17 @@ const orderSchema = new mongoose.Schema({
 
 // Generate orderId before saving
 orderSchema.pre('save', async function (next) {
-
-    if (!this.isNew) {
+    if (!this.isNew || this.orderId) {
         return next();
     }
 
     try {
-        const lastOrder = await this.constructor.findOne({}, {}, { sort: { 'orderId': -1 } });
-        let newOrderId = 'O-0001'; 
-
-        if (lastOrder && lastOrder.orderId) {
-            const lastOrderIdNumber = parseInt(lastOrder.orderId.split('-')[1], 10);
-            newOrderId = `O-${String(lastOrderIdNumber + 1).padStart(4, '0')}`;
-        }
-
-        this.orderId = newOrderId;
+        const count = await this.constructor.countDocuments();
+        this.orderId = `O-${String(count + 1).padStart(4, '0')}-${Date.now().toString().slice(-4)}`;
         next();
-
     } catch (err) {
-        next(err);
+        this.orderId = `O-${Date.now()}`;
+        next();
     }
 });
 

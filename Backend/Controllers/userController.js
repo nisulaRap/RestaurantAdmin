@@ -82,26 +82,42 @@ const register = async (req, res) => {
     try {
         const { name, email, password, role, restaurantName } = req.body;
 
-        const photo = req.file?.filename || null;
+        if (!name || !email || !password) {
+            return res.status(400).json({ success: false, message: "Name, email, and password are required" });
+        }
 
+        const existingUser = await userModel.findOne({ 
+            $or: [{ email: email.toLowerCase() }, { name }] 
+        });
+
+        if (existingUser) {
+            return res.status(400).json({ 
+                success: false, 
+                message: existingUser.email === email.toLowerCase() 
+                    ? "An account with this email already exists" 
+                    : "An account with this username already exists" 
+            });
+        }
+
+        const photo = req.file?.filename || null;
         const hashedPassword = await bcrypt.hash(password, 10);
 
         const newUser = new userModel({ 
-            name, 
-            email, 
+            name: name.trim(), 
+            email: email.toLowerCase().trim(), 
             password: hashedPassword,
-            role,
+            role: role || "Customer",
             restaurantName: role === "RestaurantAdmin" ? restaurantName : undefined,
             photo 
         });
 
         await newUser.save();
 
-        res.status(201).json({ message: `User registered successfully: ${name}` });
+        res.status(201).json({ success: true, message: `User registered successfully: ${name}` });
 
     } catch (err) {
         console.error("Registration error:", err);
-        res.status(500).json({ message: "Internal server error" });
+        res.status(500).json({ success: false, message: err.message || "Internal server error" });
     }
 };
 
