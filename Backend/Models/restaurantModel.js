@@ -43,23 +43,17 @@ const restaurantSchema = new mongoose.Schema({
 
 // Generate restaurantId before saving
 restaurantSchema.pre('save', async function(next) {
-    if(!this.isNew) {
+    if(!this.isNew || this.restaurantId) {
         return next();
     }
 
     try{
-        const lastRestaurant = await this.constructor.findOne({}, {}, { sort: { 'restaurantId': -1 } });
-        let newRestaurantId = 'R-0001';
-
-        if (lastRestaurant && lastRestaurant.restaurantId) {
-            const lastIdNum = parseInt(lastRestaurant.restaurantId.split('-')[1], 10);
-            newRestaurantId = `R-${String(lastIdNum + 1).padStart(4, '0')}`;
-        } 
-
-        this.restaurantId = newRestaurantId;
+        const count = await this.constructor.countDocuments();
+        this.restaurantId = `R-${String(count + 1).padStart(4, '0')}-${Date.now().toString().slice(-4)}`;
         next();
     } catch (error) {
-        next(error);
+        this.restaurantId = `R-${Date.now()}`;
+        next();
     }
 });
 

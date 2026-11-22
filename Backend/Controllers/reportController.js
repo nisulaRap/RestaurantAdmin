@@ -6,8 +6,8 @@ const Order = require('../Models/orderModel');
 const Menu = require('../Models/menuModel');
 const moment = require('moment');
 
-const width = 800;
-const height = 400;
+const width = 500;
+const height = 300;
 const chartJSNodeCanvas = new ChartJSNodeCanvas({ width, height });
 
 const generateReport = async (req, res) => {
@@ -84,9 +84,9 @@ const generateReport = async (req, res) => {
     doc.fontSize(14).text('Charts Overview', { align: 'center' }).moveDown(1);
     doc.image(barChart, 40, doc.y, { fit: [240, 180] });
     doc.image(lineChart, 310, doc.y, { fit: [240, 180] });
-    doc.moveDown(14);
+    doc.moveDown(12);
 
-    doc.fontSize(14).text('Recent Orders Summary', { align: 'center' }).moveDown(1);
+    doc.fontSize(14).text('Orders Summary', { align: 'center' }).moveDown(1);
 
     const orders = await Order.find({}).sort({ orderTime: -1 }).limit(10).lean();
 

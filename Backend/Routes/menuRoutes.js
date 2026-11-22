@@ -2,10 +2,11 @@ const express = require('express');
 const router = express.Router();
 const { addFood, getAllFood, getFoodById, updateFood, deleteFood, searchFood } = require('../Controllers/menuController');
 const upload = require('../Middleware/multerConfig');
-const verifyToken = require('../Middleware/verifyToken');
-const verifyRole = require('../Middleware/verifyRole');
+//const verifyToken = require('../Middleware/verifyToken');
+//const verifyRole = require('../Middleware/verifyRole');
 
-router.post('/add', verifyToken, verifyRole("RestaurantAdmin"), upload.single("image"), addFood);
+//router.post('/add', verifyToken, verifyRole("RestaurantAdmin"), upload.single("image"), addFood);
+router.post('/add', upload.single("image"), addFood);
 router.get('/list', getAllFood);
 router.get('/list/:id', getFoodById);
 router.get('/search', searchFood);

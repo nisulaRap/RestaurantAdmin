@@ -1,4 +1,5 @@
 const Order = require('../Models/orderModel');
+const { sendOrderStatusEmail } = require('../Cron/cronEmail');
 const express = require('express');
 
 const createOrder = async (req, res) => {
@@ -7,6 +8,7 @@ const createOrder = async (req, res) => {
             cartId,
             customerId,
             restaurantId,
+            customerEmail,
             items,
             totalAmount,
             paymentMethod,
@@ -14,7 +16,6 @@ const createOrder = async (req, res) => {
             notes
         } = req.body;
 
-        // Basic validation
         if (!customerId || !restaurantId || !items || !totalAmount || !paymentMethod || !deliveryLocation) {
             return res.status(400).json({ message: "Missing required fields." });
         }
@@ -23,6 +24,7 @@ const createOrder = async (req, res) => {
             cartId,
             customerId,
             restaurantId,
+            customerEmail,
             items,
             totalAmount,
             paymentMethod,
@@ -66,11 +68,22 @@ const updateStatus = async (req, res) => {
         }
 
         const order = await Order.findOne({ orderId });
-        order.orderStatus = orderStatus;
+        
+        if (!order) {
+            return res.status(404).json({ message: "Order not found" });
+        }
+        
+        if (!order.customerEmail) {
+            return res.status(400).json({ message: "Customer email is missing in the order" });
+        }
 
+        order.orderStatus = orderStatus;
         await order.save();
 
-        res.status(200).json({ success:true, message:"Status Updated"})
+         // Send email to customer
+         await sendOrderStatusEmail(order.customerEmail, orderId, orderStatus);
+
+        res.status(200).json({ success:true, message:"Order status updated successfully", order });
     } catch (error){
         console.log(error);
         res.status(500).json({success:false, message:"Error"})

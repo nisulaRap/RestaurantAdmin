@@ -19,6 +19,7 @@ const menuRoutes = require('./Routes/menuRoutes');
 const orderRoutes = require('./Routes/orderRoutes');
 const restaurantRoutes = require('./Routes/restaurantRoutes');
 const dashboardRoutes = require('./Routes/dashboardRoutes');
+const reportRoutes = require('./Routes/reportRoutes');
 
 app.use(cors(corsOptions));
 app.use(express.json());    
@@ -31,6 +32,7 @@ app.use('/api/menu', menuRoutes);
 app.use('/images', express.static('uploads'));
 app.use('/api/order', orderRoutes);
 app.use('/api/dashboard', dashboardRoutes);
+app.use('/api/report', reportRoutes);
 
 app.get('/', (req, res) => {
     res.send('API is running...');

@@ -22,6 +22,11 @@ const orderSchema = new mongoose.Schema({
         required: true
     },
 
+    customerEmail: {
+        type: String,
+        required: true
+    },
+
     items: [
         {
             itemId: {

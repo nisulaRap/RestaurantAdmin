@@ -3,22 +3,36 @@ const fs = require('fs');
 
 const addFood = async (req, res) => {
     try {
+        if (!req.file) {
+            return res.status(400).json({ success: false, message: 'Please upload a dish image (JPG, PNG, or WEBP under 10MB)' });
+        }
+
         let image_filename = req.file.filename;
 
+        const { name, description, price, category, restaurantId } = req.body;
+
+        if (!name || !price || !category) {
+            return res.status(400).json({ success: false, message: 'Name, price, and category are required' });
+        }
+
+        const count = await Menu.countDocuments();
+        const generatedId = `M-${String(count + 1).padStart(4, '0')}-${Date.now().toString().slice(-4)}`;
+
         const food = new Menu({
-            name: req.body.name,
-            description: req.body.description,
-            price: req.body.price,
+            menuId: generatedId,
+            name: name.trim(),
+            description: description ? description.trim() : '',
+            price: Number(price),
             image: image_filename,
-            category: req.body.category,
-            restaurantId: req.body.restaurantId
+            category: category,
+            restaurantId: restaurantId ? restaurantId.trim() : 'DEFAULT'
         });
 
         await food.save();
-        res.status(200).json({ success: true, message: 'Food added successfully' });
+        res.status(200).json({ success: true, message: 'Food added successfully', data: food });
     } catch (error) {
-        console.error(error);
-        res.status(500).json({ success: false, message: 'Error adding food' });
+        console.error('Error adding food:', error);
+        res.status(500).json({ success: false, message: error.message || 'Error adding food' });
     }
 };
 

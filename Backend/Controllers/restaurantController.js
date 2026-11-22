@@ -3,29 +3,37 @@ const fs = require('fs');
 
 const addRestaurant = async (req, res) => {
   try {
-    let image_filename = req.file.filename;
-
-    const { restaurantName, restaurantLocation, lat, lng, status } = req.body; 
-    
-    if (!restaurantName || !restaurantLocation || !lat || !lng || !status) {
-      return res.status(400).json({ success: false, message: 'All fields are required' });
+    if (!req.file) {
+      return res.status(400).json({ success: false, message: 'Please upload a restaurant photo (JPG, PNG, or WEBP under 10MB)' });
     }
 
+    let image_filename = req.file.filename;
+    const { restaurantName, restaurantLocation, lat, lng, status } = req.body; 
+    
+    if (!restaurantName || !restaurantLocation) {
+      return res.status(400).json({ success: false, message: 'Restaurant name and location are required' });
+    }
+
+    // Auto-generate unique restaurantId safely
+    const count = await Restaurant.countDocuments();
+    const generatedId = `R-${String(count + 1).padStart(4, '0')}-${Date.now().toString().slice(-4)}`;
+
     const newRestaurant = new Restaurant({
-      restaurantName,
-      restaurantLocation,
+      restaurantId: generatedId,
+      restaurantName: restaurantName.trim(),
+      restaurantLocation: restaurantLocation.trim(),
       restaurantPhoto: image_filename,
-      lat,
-      lng,
-      status,
+      lat: lat ? String(lat).trim() : "6.9271",
+      lng: lng ? String(lng).trim() : "79.8612",
+      status: status || 'Opened',
     });
 
     await newRestaurant.save();
 
-    res.status(201).json({ success: true, message: 'Restaurant added successfully' });
+    res.status(201).json({ success: true, message: 'Restaurant added successfully', data: newRestaurant });
   } catch (error) {
-    console.error('Error while saving restaurant:', error.message);
-    res.status(500).json({ success: false, message: 'Error adding restaurant' });
+    console.error('Error while saving restaurant:', error);
+    res.status(500).json({ success: false, message: error.message || 'Error adding restaurant' });
   }
 };
 
